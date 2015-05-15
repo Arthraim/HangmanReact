@@ -123,6 +123,17 @@ var HangmanReact = React.createClass({
     console.log('onPress', letter)
     this.state.gameObject.makeAGuess(letter, (responseData) => {
       this.setState(responseData.data)
+      // rech limit of guess times for single word
+      if (this.state.wrongGuessCountOfCurrentWord > 0
+          && this.state.numberOfGuessAllowedForEachWord > 0
+          && this.state.wrongGuessCountOfCurrentWord == this.state.numberOfGuessAllowedForEachWord) {
+        // get next word
+        this.state.gameObject.giveMeAWord((responseData) => {
+          console.log('give me another word')
+          console.log(responseData)
+          this.setState(responseData.data)
+        })
+      }
     })
   },
   render: function() {
