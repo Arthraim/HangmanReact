@@ -34,7 +34,7 @@ class GameObject {
   }
 
   giveMeAWord(callback) {
-    requestBody = {
+    var requestBody = {
       sessionId: this.sessionId,
       action: "nextWord"
     }
@@ -42,7 +42,7 @@ class GameObject {
   }
 
   makeAGuess(letter, callback) {
-    requestBody = {
+    var requestBody = {
       sessionId: this.sessionId,
       action: "guessWord",
       guess: letter
@@ -51,7 +51,7 @@ class GameObject {
   }
 
   getYourResult(callback) {
-    requestBody = {
+    var requestBody = {
       sessionId: this.sessionId,
       action : "getResult"
     }
@@ -59,7 +59,7 @@ class GameObject {
   }
 
   submitYourResult(callback) {
-    requestBody = {
+    var requestBody = {
       sessionId: this.sessionId,
       action : "submitResult"
     }
@@ -92,6 +92,7 @@ var HangmanReact = React.createClass({
   getInitialState: function() {
     return {
       gameObject: null,
+      word: '',
       numberOfWordsToGuess: 0,
       numberOfGuessAllowedForEachWord: 0,
       wrongGuessCountOfCurrentWord: 0,
@@ -102,17 +103,27 @@ var HangmanReact = React.createClass({
     };
   },
   componentDidMount: function() {
+    // init gameObject
     var gObj = new GameObject()
     this.setState({gameObject: gObj})
+    // start game
     gObj.startGame((responseData) => {
       console.log('start game done')
       console.log(responseData)
       this.setState(responseData.data)
+      // get first word here
+      gObj.giveMeAWord((responseData) => {
+        console.log('give me a word')
+        console.log(responseData)
+        this.setState(responseData.data)
+      })
     })
   },
-  onPress: function() {
-    console.log('onPress')
-    this.setState({keyboard_text: 'Keyboard Pressed'})
+  onPress: function(letter) {
+    console.log('onPress', letter)
+    this.state.gameObject.makeAGuess(letter, (responseData) => {
+      this.setState(responseData.data)
+    })
   },
   render: function() {
     return (
@@ -124,42 +135,42 @@ var HangmanReact = React.createClass({
           <Text>score {this.state.score}</Text>
         </View>
         <View style={styles.wordContainer}>
-          <Text style={styles.word}>Word</Text>
+          <Text style={styles.word}>{this.state.word}</Text>
         </View>
         <View style={styles.keyboardContainer}>
           <View style={styles.keyboard}>
             <View style={styles.keyboardRow}>
-              <TouchableHighlight style={styles.key} onPress={this.onPress}><Text style={styles.keyText}>Q</Text></TouchableHighlight>
-              <TouchableHighlight style={styles.key} onPress={this.onPress}><Text style={styles.keyText}>W</Text></TouchableHighlight>
-              <TouchableHighlight style={styles.key} onPress={this.onPress}><Text style={styles.keyText}>E</Text></TouchableHighlight>
-              <TouchableHighlight style={styles.key} onPress={this.onPress}><Text style={styles.keyText}>R</Text></TouchableHighlight>
-              <TouchableHighlight style={styles.key} onPress={this.onPress}><Text style={styles.keyText}>T</Text></TouchableHighlight>
-              <TouchableHighlight style={styles.key} onPress={this.onPress}><Text style={styles.keyText}>Y</Text></TouchableHighlight>
-              <TouchableHighlight style={styles.key} onPress={this.onPress}><Text style={styles.keyText}>U</Text></TouchableHighlight>
-              <TouchableHighlight style={styles.key} onPress={this.onPress}><Text style={styles.keyText}>I</Text></TouchableHighlight>
-              <TouchableHighlight style={styles.key} onPress={this.onPress}><Text style={styles.keyText}>O</Text></TouchableHighlight>
-              <TouchableHighlight style={styles.key} onPress={this.onPress}><Text style={styles.keyText}>P</Text></TouchableHighlight>
+              <TouchableHighlight style={styles.key} onPress={this.onPress.bind(this, "Q")}><Text style={styles.keyText}>Q</Text></TouchableHighlight>
+              <TouchableHighlight style={styles.key} onPress={this.onPress.bind(this, "W")}><Text style={styles.keyText}>W</Text></TouchableHighlight>
+              <TouchableHighlight style={styles.key} onPress={this.onPress.bind(this, "E")}><Text style={styles.keyText}>E</Text></TouchableHighlight>
+              <TouchableHighlight style={styles.key} onPress={this.onPress.bind(this, "R")}><Text style={styles.keyText}>R</Text></TouchableHighlight>
+              <TouchableHighlight style={styles.key} onPress={this.onPress.bind(this, "T")}><Text style={styles.keyText}>T</Text></TouchableHighlight>
+              <TouchableHighlight style={styles.key} onPress={this.onPress.bind(this, "Y")}><Text style={styles.keyText}>Y</Text></TouchableHighlight>
+              <TouchableHighlight style={styles.key} onPress={this.onPress.bind(this, "U")}><Text style={styles.keyText}>U</Text></TouchableHighlight>
+              <TouchableHighlight style={styles.key} onPress={this.onPress.bind(this, "I")}><Text style={styles.keyText}>I</Text></TouchableHighlight>
+              <TouchableHighlight style={styles.key} onPress={this.onPress.bind(this, "O")}><Text style={styles.keyText}>O</Text></TouchableHighlight>
+              <TouchableHighlight style={styles.key} onPress={this.onPress.bind(this, "P")}><Text style={styles.keyText}>P</Text></TouchableHighlight>
             </View>
             <View style={styles.keyboardRow}>
-              <TouchableHighlight style={styles.key} onPress={this.onPress}><Text style={styles.keyText}>A</Text></TouchableHighlight>
-              <TouchableHighlight style={styles.key} onPress={this.onPress}><Text style={styles.keyText}>S</Text></TouchableHighlight>
-              <TouchableHighlight style={styles.key} onPress={this.onPress}><Text style={styles.keyText}>D</Text></TouchableHighlight>
-              <TouchableHighlight style={styles.key} onPress={this.onPress}><Text style={styles.keyText}>F</Text></TouchableHighlight>
-              <TouchableHighlight style={styles.key} onPress={this.onPress}><Text style={styles.keyText}>G</Text></TouchableHighlight>
-              <TouchableHighlight style={styles.key} onPress={this.onPress}><Text style={styles.keyText}>H</Text></TouchableHighlight>
-              <TouchableHighlight style={styles.key} onPress={this.onPress}><Text style={styles.keyText}>J</Text></TouchableHighlight>
-              <TouchableHighlight style={styles.key} onPress={this.onPress}><Text style={styles.keyText}>K</Text></TouchableHighlight>
-              <TouchableHighlight style={styles.key} onPress={this.onPress}><Text style={styles.keyText}>L</Text></TouchableHighlight>
+              <TouchableHighlight style={styles.key} onPress={this.onPress.bind(this, "A")}><Text style={styles.keyText}>A</Text></TouchableHighlight>
+              <TouchableHighlight style={styles.key} onPress={this.onPress.bind(this, "S")}><Text style={styles.keyText}>S</Text></TouchableHighlight>
+              <TouchableHighlight style={styles.key} onPress={this.onPress.bind(this, "D")}><Text style={styles.keyText}>D</Text></TouchableHighlight>
+              <TouchableHighlight style={styles.key} onPress={this.onPress.bind(this, "F")}><Text style={styles.keyText}>F</Text></TouchableHighlight>
+              <TouchableHighlight style={styles.key} onPress={this.onPress.bind(this, "G")}><Text style={styles.keyText}>G</Text></TouchableHighlight>
+              <TouchableHighlight style={styles.key} onPress={this.onPress.bind(this, "H")}><Text style={styles.keyText}>H</Text></TouchableHighlight>
+              <TouchableHighlight style={styles.key} onPress={this.onPress.bind(this, "J")}><Text style={styles.keyText}>J</Text></TouchableHighlight>
+              <TouchableHighlight style={styles.key} onPress={this.onPress.bind(this, "K")}><Text style={styles.keyText}>K</Text></TouchableHighlight>
+              <TouchableHighlight style={styles.key} onPress={this.onPress.bind(this, "L")}><Text style={styles.keyText}>L</Text></TouchableHighlight>
             </View>
             <View style={styles.keyboardRow}>
               <View style={styles.fakeKey}></View>
-              <TouchableHighlight style={styles.key} onPress={this.onPress}><Text style={styles.keyText}>Z</Text></TouchableHighlight>
-              <TouchableHighlight style={styles.key} onPress={this.onPress}><Text style={styles.keyText}>X</Text></TouchableHighlight>
-              <TouchableHighlight style={styles.key} onPress={this.onPress}><Text style={styles.keyText}>C</Text></TouchableHighlight>
-              <TouchableHighlight style={styles.key} onPress={this.onPress}><Text style={styles.keyText}>V</Text></TouchableHighlight>
-              <TouchableHighlight style={styles.key} onPress={this.onPress}><Text style={styles.keyText}>B</Text></TouchableHighlight>
-              <TouchableHighlight style={styles.key} onPress={this.onPress}><Text style={styles.keyText}>N</Text></TouchableHighlight>
-              <TouchableHighlight style={styles.key} onPress={this.onPress}><Text style={styles.keyText}>M</Text></TouchableHighlight>
+              <TouchableHighlight style={styles.key} onPress={this.onPress.bind(this, "Z")}><Text style={styles.keyText}>Z</Text></TouchableHighlight>
+              <TouchableHighlight style={styles.key} onPress={this.onPress.bind(this, "X")}><Text style={styles.keyText}>X</Text></TouchableHighlight>
+              <TouchableHighlight style={styles.key} onPress={this.onPress.bind(this, "C")}><Text style={styles.keyText}>C</Text></TouchableHighlight>
+              <TouchableHighlight style={styles.key} onPress={this.onPress.bind(this, "V")}><Text style={styles.keyText}>V</Text></TouchableHighlight>
+              <TouchableHighlight style={styles.key} onPress={this.onPress.bind(this, "B")}><Text style={styles.keyText}>B</Text></TouchableHighlight>
+              <TouchableHighlight style={styles.key} onPress={this.onPress.bind(this, "N")}><Text style={styles.keyText}>N</Text></TouchableHighlight>
+              <TouchableHighlight style={styles.key} onPress={this.onPress.bind(this, "M")}><Text style={styles.keyText}>M</Text></TouchableHighlight>
               <View style={styles.fakeKey}></View>
             </View>
           </View>
