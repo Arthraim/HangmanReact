@@ -148,10 +148,18 @@ var HangmanReact = React.createClass({
     return (
       <View style={styles.container}>
         <View style={styles.misc}>
-          <Text>WORDS: {this.state.correctWordCount} | {this.state.totalWordCount} | {this.state.numberOfWordsToGuess}</Text>
-          <Text>GUESSES: {this.state.wrongGuessCountOfCurrentWord} / {this.state.numberOfGuessAllowedForEachWord}</Text>
-          <Text>totalWrongGuessCount {this.state.totalWrongGuessCount}</Text>
-          <Text>score {this.state.score}</Text>
+          <View style={styles.miscSectionHeader}><Text style={styles.miscSectionHeaderText}>WORDS</Text></View>
+          <View style={styles.miscNumbersRow}>
+            {this.renderMiscNumber('Correct', this.state.correctWordCount)}
+            {this.renderMiscNumber('Guessed', this.state.totalWordCount)}
+            {this.renderMiscNumber('Total', this.state.numberOfWordsToGuess)}
+          </View>
+          <View style={styles.miscSectionHeader}><Text style={styles.miscSectionHeaderText}>GUESSES</Text></View>
+          <View style={styles.miscNumbersRow}>
+            {this.renderMiscNumber('Wrong', this.state.wrongGuessCountOfCurrentWord)}
+            {this.renderMiscNumber('Total', this.state.numberOfGuessAllowedForEachWord)}
+          </View>
+          {this.renderScore()}
         </View>
         <View style={styles.wordContainer}>
           <Text style={styles.word}>{this.state.word}</Text>
@@ -197,6 +205,24 @@ var HangmanReact = React.createClass({
       </View>
     );
   },
+  renderMiscNumber: function(title, number) {
+    return (
+      <View style={styles.miscNumber}>
+        <Text style={styles.miscTitle}>{title}</Text>
+        <Text style={styles.miscBigNumber}>{number}</Text>
+      </View>
+    );
+  },
+  renderScore: function() {
+    if (this.state.totalWrongGuessCount > 0) {
+      return (
+        <View>
+          <Text>totalWrongGuessCount {this.state.totalWrongGuessCount}</Text>
+          <Text>score {this.state.score}</Text>
+        </View>
+      );
+    }
+  },
   renderKey: function(letter) {
     if (this.state.attemptedLetters.indexOf(letter) > -1) {
       return (
@@ -215,12 +241,42 @@ var styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     backgroundColor: '#ffffff',
+    marginTop: 20,
   },
   misc: {
     flex: 1,
+    flexDirection: 'column',
+    backgroundColor: '#2ecc71',
+    padding: 10,
+  },
+  miscSectionHeader: {
+    height: 40,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#2ecc71',
+    borderBottomWidth: 1,
+    borderColor: '#27ae60'
+  },
+  miscSectionHeaderText: {
+    fontSize: 18,
+    color: '#ffffff',
+    marginLeft: 15,
+  },
+  miscNumbersRow: {
+    flex: 1,
+    flexDirection: 'row',
+  },
+  miscNumber: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  miscTitle: {
+    color: '#555555',
+  },
+  miscBigNumber: {
+    fontSize: 30,
+    color: '#111111',
   },
   wordContainer: {
     flex: 1,
