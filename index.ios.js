@@ -117,6 +117,8 @@ var HangmanReact = React.createClass({
         console.log('give me a word')
         console.log(responseData)
         this.setState(responseData.data)
+        // clear attempted letters
+        this.setState({attemptedLetters:[]})
       })
     })
   },
