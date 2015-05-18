@@ -176,42 +176,7 @@ var HangmanReact = React.createClass({
           <Text style={styles.word}>{this.state.word}</Text>
         </View>
         <View style={styles.keyboardContainer}>
-          <View style={styles.keyboard}>
-            <View style={styles.keyboardRow}>
-              {this.renderKey('Q')}
-              {this.renderKey('W')}
-              {this.renderKey('E')}
-              {this.renderKey('R')}
-              {this.renderKey('T')}
-              {this.renderKey('Y')}
-              {this.renderKey('U')}
-              {this.renderKey('I')}
-              {this.renderKey('O')}
-              {this.renderKey('P')}
-            </View>
-            <View style={styles.keyboardRow}>
-              {this.renderKey('A')}
-              {this.renderKey('S')}
-              {this.renderKey('D')}
-              {this.renderKey('F')}
-              {this.renderKey('G')}
-              {this.renderKey('H')}
-              {this.renderKey('J')}
-              {this.renderKey('K')}
-              {this.renderKey('L')}
-            </View>
-            <View style={styles.keyboardRow}>
-              <View style={styles.fakeKey}></View>
-              {this.renderKey('Z')}
-              {this.renderKey('X')}
-              {this.renderKey('C')}
-              {this.renderKey('V')}
-              {this.renderKey('B')}
-              {this.renderKey('N')}
-              {this.renderKey('M')}
-              <View style={styles.fakeKey}></View>
-            </View>
-          </View>
+          {this.renderKeyboard()}
         </View>
       </View>
     );
@@ -234,16 +199,28 @@ var HangmanReact = React.createClass({
       );
     }
   },
-  renderKey: function(letter) {
-    if (this.state.attemptedLetters.indexOf(letter) > -1) {
-      return (
-        <View style={styles.keyDisabled}><Text style={styles.keyText}>{letter}</Text></View>
-      );
-    } else {
-      return (
-        <TouchableHighlight underlayColor='#dddddd' style={styles.key} onPress={this.onPress.bind(this, letter)}><Text style={styles.keyText}>{letter}</Text></TouchableHighlight>
-      );
-    }
+  renderKeyboard: function() {
+    return (
+      <View style={styles.keyboard}>{
+          [['Q','W','E','R','T','Y','U','I','O','P'],
+           ['A','S','D','F','G','H','J','K','L'],
+           [' ','Z','X','C','V','B','N','M',' ']].map((letters) => {
+            return (
+              <View style={styles.keyboardRow}>
+                {letters.map((letter) => {
+                  if (letter == ' ') {
+                    return <View style={styles.fakeKey}></View>
+                  } else if (this.state.attemptedLetters.indexOf(letter) > -1) {
+                    return <View style={styles.keyDisabled}><Text style={styles.keyText}>{letter}</Text></View>
+                  } else {
+                    return <TouchableHighlight underlayColor='#dddddd' style={styles.key} onPress={this.onPress.bind(this, letter)}><Text style={styles.keyText}>{letter}</Text></TouchableHighlight>
+                  }
+                })}
+              </View>
+            )
+          })
+      }</View>
+    )
   }
 });
 
