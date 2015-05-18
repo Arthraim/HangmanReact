@@ -133,7 +133,7 @@ var HangmanReact = React.createClass({
       array.push(letter)
       this.setState({attemptedLetters: array})
       this.setState(responseData.data)
-      // rech limit of guess times for single word
+      // reach limit of guess times for single word
       if (this.state.wrongGuessCountOfCurrentWord > 0
           && this.state.numberOfGuessAllowedForEachWord > 0
           && this.state.wrongGuessCountOfCurrentWord == this.state.numberOfGuessAllowedForEachWord) {
@@ -143,6 +143,15 @@ var HangmanReact = React.createClass({
           console.log(responseData)
           this.setState(responseData.data)
         })
+        // reach limit of words
+        if (this.state.numberOfWordsToGuess > 0
+            && this.state.totalWordCount > 0
+            && this.state.numberOfWordsToGuess == this.state.totalWordCount) {
+          // udpate score
+          this.state.gameObject.getYourResult((responseData) => {
+            this.setState(responseData.data)
+          })
+        }
       }
     })
   },
