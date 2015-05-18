@@ -18,7 +18,7 @@ class GameObject {
   }
 
   giveMeAWord(callback) {
-    requestBody = {
+    var requestBody = {
       sessionId: this.sessionId,
       action: "nextWord"
     }
@@ -26,7 +26,7 @@ class GameObject {
   }
 
   makeAGuess(letter, callback) {
-    requestBody = {
+    var requestBody = {
       sessionId: this.sessionId,
       action: "guessWord",
       guess: letter
@@ -35,7 +35,7 @@ class GameObject {
   }
 
   getYourResult(callback) {
-    requestBody = {
+    var requestBody = {
       sessionId: this.sessionId,
       action : "getResult"
     }
@@ -43,7 +43,7 @@ class GameObject {
   }
 
   submitYourResult(callback) {
-    requestBody = {
+    var requestBody = {
       sessionId: this.sessionId,
       action : "submitResult"
     }
@@ -71,3 +71,5 @@ class GameObject {
     })
   }
 } // end class GameObject
+
+module.exports = GameObject;
