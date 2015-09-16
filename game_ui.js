@@ -69,6 +69,8 @@ var GameUI = React.createClass({
           console.log('give me another word')
           console.log(responseData)
           this.setState(responseData.data)
+          // clear attempted letters
+          this.setState({attemptedLetters:[]})
         })
         // reach limit of words
         if (this.state.numberOfWordsToGuess > 0
