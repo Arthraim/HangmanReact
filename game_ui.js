@@ -23,6 +23,7 @@ var GameUI = React.createClass({
       numberOfWordsToGuess: 0,
       numberOfGuessAllowedForEachWord: 0,
       wrongGuessCountOfCurrentWord: 0,
+      // 4 states get from result
       totalWordCount: 0,
       correctWordCount: 0,
       totalWrongGuessCount: 0,
@@ -63,7 +64,14 @@ var GameUI = React.createClass({
       // reach limit of guess times for single word
       if (this.state.wrongGuessCountOfCurrentWord > 0
           && this.state.numberOfGuessAllowedForEachWord > 0
-          && this.state.wrongGuessCountOfCurrentWord == this.state.numberOfGuessAllowedForEachWord) {
+          && (this.state.wrongGuessCountOfCurrentWord == this.state.numberOfGuessAllowedForEachWord /*wrong*/
+              || !this.state.word.includes('*') /*right*/)) {
+        // udpate score
+        this.state.gameObject.getYourResult((responseData) => {
+          console.log('refresh result')
+          console.log(responseData)
+          this.setState(responseData.data)
+        })
         // get next word
         this.state.gameObject.giveMeAWord((responseData) => {
           console.log('give me another word')
