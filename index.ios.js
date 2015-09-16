@@ -7,10 +7,6 @@ var React = require('react-native');
 var {
   AppRegistry,
   StyleSheet,
-  Text,
-  View,
-  AlertIOS,
-  TouchableHighlight,
 } = React;
 
 var GameObject = require('./game')
